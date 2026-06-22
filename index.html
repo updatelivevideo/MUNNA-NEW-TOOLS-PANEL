@@ -1,409 +1,1656 @@
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MUNNA TOOLS STORE Dashboard</title>
+    <title>MUNNA TOOLS STORE – Customer Dashboard</title>
+    <meta name="description" content="MUNNA TOOLS STORE – Manage your bot licenses, subscriptions and account.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Admin Panel er Exact CSS variables */
         :root {
-            --bg: #0b1220;
-            --bg2: #0f1724;
-            --border: #213041;
-            --text: #e6eef6
+            --bg: #060d1a;
+            --bg2: #0c1526;
+            --bg3: #111e33;
+            --border: #1d2f48;
+            --text: #dde8f4;
+            --text2: #7a95b0;
+            --accent: #00c6ff;
+            --accent2: #0072ff;
+            --success: #00e676;
+            --danger: #ff4d6d;
+            --warning: #ffd166;
+            --card-glow: rgba(0,198,255,0.08);
         }
 
-        [data-theme=light] {
-            --bg: #f0f4f8;
-            --bg2: #ffffff;
-            --border: #d0dce8;
-            --text: #1a2636
-        }
+        * { box-sizing: border-box; }
 
         body {
-            padding: 0;
-            margin: 0;
+            margin: 0; padding: 0;
             background: var(--bg);
             color: var(--text);
-            transition: background .3s, color .3s;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        .card {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-        }
-
-        table thead {
-            background: #e9ecef;
-            color: #0b1220
-        }
-
-        [data-theme=light] table thead {
-            background: #1a2636;
-            color: #f0f4f8
-        }
-
-        /* Sidebar Design (Copied from Admin Panel) */
-        #sidebar {
-            width: 200px;
+            font-family: 'Inter', system-ui, sans-serif;
             min-height: 100vh;
-            background: #070d18;
-            border-right: 1px solid #213041;
-            padding: .5rem 0;
-            flex-shrink: 0
         }
 
-        #sidebar .nav-item {
-            padding: .55rem 1rem;
-            cursor: pointer;
-            color: #8fa3b8;
-            font-size: .88rem;
-            border-left: 3px solid transparent;
-            transition: all .2s;
-            -webkit-user-select: none;
-            user-select: none
-        }
-
-        #sidebar .nav-item:hover {
-            background: #0f1724;
-            color: #e6eef6
-        }
-
-        #sidebar .nav-item.active {
-            color: #fff;
-            background: #0f1724;
-            border-left-color: #0dcaf0
-        }
-
-        #sidebar .nav-brand {
-            padding: .75rem 1rem 1rem;
-            font-weight: 700;
-            font-size: .85rem;
-            color: #0dcaf0;
-            border-bottom: 1px solid #213041;
-            margin-bottom: .5rem
-        }
-
-        .page-wrapper {
-            display: flex;
-            min-height: 100vh
-        }
-
-        #mainContent {
-            flex: 1;
-            padding: 1.5rem;
-            min-width: 0
-        }
-
-        @media(max-width:600px) {
-            #sidebar {
-                width: 56px
-            }
-
-            #sidebar .nav-label {
-                display: none
-            }
-        }
-
-        /* Auth Form Full Screen Wrapper */
+        /* ===== AUTH PAGE ===== */
         #authSection {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            background: var(--bg);
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 9999;
+            background: radial-gradient(ellipse at 50% 0%, #0d2444 0%, #060d1a 70%);
         }
 
-        .hidden {
-            display: none !important;
+        .auth-wrap {
+            width: 100%;
+            max-width: 420px;
+            padding: 1rem;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo .logo-icon {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: .75rem;
+            box-shadow: 0 8px 32px rgba(0,198,255,0.35);
+        }
+
+        .auth-logo h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00c6ff, #7b61ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .auth-logo p {
+            color: var(--text2);
+            font-size: .85rem;
+            margin: .25rem 0 0;
         }
 
         .auth-card {
-            width: 360px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+        }
+
+        .auth-card .form-control {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: .75rem 1rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .auth-card .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,198,255,0.15);
+            background: var(--bg3);
+            color: var(--text);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: .75rem;
+            transition: all .2s;
+            box-shadow: 0 4px 16px rgba(0,114,255,0.4);
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0,114,255,0.5);
+            color: #fff;
+        }
+
+        .btn-gradient-success {
+            background: linear-gradient(135deg, #00c853, #00897b);
+            border: none; color: #fff; font-weight: 600;
+            border-radius: 10px; padding: .75rem;
+            transition: all .2s;
+            box-shadow: 0 4px 16px rgba(0,200,83,0.3);
+        }
+
+        .btn-gradient-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0,200,83,0.45);
+            color: #fff;
+        }
+
+        /* ===== LAYOUT ===== */
+        .hidden { display: none !important; }
+
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        #sidebar {
+            width: 240px;
+            min-height: 100vh;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            padding: 1.25rem 1.25rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .sidebar-brand .brand-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand .brand-text {
+            font-size: .82rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .sidebar-brand .brand-text small {
+            display: block;
+            color: var(--text2);
+            font-weight: 400;
+            font-size: .72rem;
+        }
+
+        .nav-section-label {
+            padding: .75rem 1.25rem .35rem;
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: .08em;
+            color: var(--text2);
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            padding: .65rem 1.25rem;
+            cursor: pointer;
+            color: var(--text2);
+            font-size: .875rem;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all .2s;
+            border-radius: 0;
+            margin: .1rem 0;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .nav-item:hover {
+            background: var(--bg3);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            background: rgba(0,198,255,0.08);
+            border-left-color: var(--accent);
+        }
+
+        .nav-item .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: .95rem;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            padding: .5rem .75rem;
+            background: var(--bg3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .user-pill:hover { background: #1a2a42; }
+
+        .user-pill .avatar {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, #7b61ff, #00c6ff);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .85rem;
+            flex-shrink: 0;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .user-pill .uinfo { flex: 1; min-width: 0; }
+        .user-pill .uname {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-pill .urole {
+            font-size: .68rem;
+            color: var(--accent);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        #mainContent {
+            flex: 1;
+            padding: 1.75rem 2rem;
+            min-width: 0;
+            background: var(--bg);
+        }
+
+        /* ===== TOP BAR ===== */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .page-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .page-subtitle {
+            font-size: .82rem;
+            color: var(--text2);
+            margin-top: .2rem;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+
+        .btn-icon {
+            width: 36px; height: 36px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all .2s;
+            color: var(--text2);
+            font-size: .9rem;
+        }
+        .btn-icon:hover { background: var(--bg2); color: var(--text); }
+
+        /* ===== STAT CARDS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .stat-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--stat-color, linear-gradient(90deg, #00c6ff, #0072ff));
+            border-radius: 14px 14px 0 0;
+        }
+
+        .stat-card .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: .5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.1;
+        }
+
+        .stat-card .stat-label {
+            font-size: .75rem;
+            color: var(--text2);
+            margin-top: .2rem;
+        }
+
+        /* ===== SECTION HEADER ===== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.1rem;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .section-badge {
+            font-size: .72rem;
+            background: rgba(0,198,255,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(0,198,255,0.25);
+            padding: .2rem .65rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* ===== TOOL CARDS ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .tool-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform .2s, box-shadow .2s, border-color .2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+            border-color: rgba(0,198,255,0.3);
+        }
+
+        .tool-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top left, var(--card-glow), transparent 60%);
+            pointer-events: none;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: flex-start;
+            gap: .85rem;
+        }
+
+        .tool-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, #0d2444, #1a3a6e);
+            border: 1px solid rgba(0,198,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .tool-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .tool-version {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            font-size: .7rem;
+            color: var(--accent);
+            background: rgba(0,198,255,0.1);
+            border: 1px solid rgba(0,198,255,0.2);
+            padding: .15rem .5rem;
+            border-radius: 20px;
+            margin-top: .3rem;
+            font-weight: 600;
+        }
+
+        .tool-prices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: .4rem;
+        }
+
+        .price-pill {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: .4rem .3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .price-pill:hover, .price-pill.selected {
+            border-color: var(--accent);
+            background: rgba(0,198,255,0.1);
+        }
+
+        .price-pill .plan-label {
+            font-size: .65rem;
+            color: var(--text2);
+            font-weight: 600;
+            display: block;
+        }
+
+        .price-pill .plan-price {
+            font-size: .85rem;
+            font-weight: 700;
+            color: var(--text);
+            display: block;
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #00c853 0%, #00897b 100%);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: .65rem 1rem;
+            font-size: .875rem;
+            cursor: pointer;
+            transition: all .2s;
+            box-shadow: 0 4px 12px rgba(0,200,83,0.3);
+            letter-spacing: .01em;
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0,200,83,0.45);
+        }
+
+        /* ===== LICENSES TABLE ===== */
+        .table-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .table-card table {
+            margin: 0;
+        }
+
+        .table-card thead th {
+            background: var(--bg3);
+            color: var(--text2);
+            font-size: .75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            padding: .9rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            border-top: none;
+        }
+
+        .table-card tbody td {
+            padding: .85rem 1.25rem;
+            border-bottom: 1px solid rgba(29,47,72,0.6);
+            color: var(--text);
+            font-size: .875rem;
+            vertical-align: middle;
+        }
+
+        .table-card tbody tr:last-child td { border-bottom: none; }
+
+        .table-card tbody tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .license-tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            background: rgba(0,198,255,0.08);
+            border: 1px solid rgba(0,198,255,0.2);
+            color: var(--accent);
+            padding: .25rem .65rem;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+
+        .key-box {
+            font-family: monospace;
+            background: var(--bg3);
+            border: 1px dashed #2a4060;
+            padding: .25rem .65rem;
+            border-radius: 6px;
+            font-size: .8rem;
+            color: var(--warning);
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .key-box:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .badge-status-ok {
+            background: rgba(0,230,118,0.15);
+            color: var(--success);
+            border: 1px solid rgba(0,230,118,0.3);
+            padding: .3rem .75rem;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+
+        .badge-status-bad {
+            background: rgba(255,77,109,0.15);
+            color: var(--danger);
+            border: 1px solid rgba(255,77,109,0.3);
+            padding: .3rem .75rem;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+
+        /* ===== PROFILE / ACCOUNT ===== */
+        .profile-header-card {
+            background: linear-gradient(135deg, #0d2444 0%, #0c1526 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .profile-avatar-lg {
+            width: 72px; height: 72px;
+            background: linear-gradient(135deg, #7b61ff, #00c6ff);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 8px 24px rgba(123,97,255,0.4);
+        }
+
+        .profile-info h5 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 .25rem;
+        }
+
+        .profile-info p {
+            font-size: .82rem;
+            color: var(--text2);
+            margin: 0 0 .5rem;
+        }
+
+        .profile-member-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            font-size: .72rem;
+            background: rgba(123,97,255,0.12);
+            color: #a78bfa;
+            border: 1px solid rgba(123,97,255,0.25);
+            padding: .2rem .65rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .form-section-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-section-card h6 {
+            font-size: .875rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1.25rem;
+            padding-bottom: .75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-label-custom {
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: .4rem;
+            display: block;
+        }
+
+        .form-control-custom {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: .65rem 1rem;
+            width: 100%;
+            font-size: .875rem;
+            transition: border-color .2s, box-shadow .2s;
+            outline: none;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,198,255,0.12);
+        }
+
+        .form-control-custom:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        /* ===== LOADING ===== */
+        .spinner-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.7); opacity: .5; }
+            50% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text2);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: .5;
+        }
+
+        .empty-state h6 {
+            font-size: .95rem;
+            color: var(--text);
+            margin-bottom: .5rem;
+        }
+
+        /* ===== TOAST ===== */
+        #toastContainer {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+        }
+
+        .toast-msg {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: .75rem 1.25rem;
+            font-size: .85rem;
+            color: var(--text);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            animation: slideUp .3s ease;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            min-width: 220px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(16px); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+
+        .toast-ok   { border-left: 3px solid var(--success); }
+        .toast-err  { border-left: 3px solid var(--danger); }
+        .toast-info { border-left: 3px solid var(--accent); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            #sidebar { width: 60px; }
+            .sidebar-brand .brand-text,
+            .nav-item span:not(.nav-icon),
+            .sidebar-footer .uinfo,
+            .nav-section-label { display: none; }
+            #mainContent { padding: 1rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
-
 <body>
 
-    <div id="authSection">
-        <div class="card p-4 shadow auth-card">
-            <h4 class="text-center mb-4 text-info fw-bold">🛒 MUNNA TOOLS STORE</h4>
-            <div id="authAlert" class="alert hidden small py-2"></div>
+<!-- ===== AUTHENTICATION SECTION ===== -->
+<div id="authSection" class="auth-wrapper hidden">
+    <div class="auth-wrap">
+        <div class="auth-logo">
+            <div class="logo-icon">🛒</div>
+            <h2>MUNNA TOOLS STORE</h2>
+            <p>Professional Bot Licensing Platform</p>
+        </div>
+        <div class="auth-card">
+            <div id="authAlert" class="mb-3 hidden" style="padding:.65rem 1rem;border-radius:10px;font-size:.85rem;"></div>
 
+            <!-- Login Form -->
             <form id="loginForm">
-                <div class="mb-3"><input type="email" id="logEmail"
-                        class="form-control bg-dark text-light border-secondary" placeholder="Email Address" required>
+                <div class="mb-1" style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.75rem;">Welcome back 👋</div>
+                <div class="mb-3">
+                    <label class="form-label-custom">Email Address</label>
+                    <input type="email" id="logEmail" class="form-control" placeholder="you@email.com" required
+                        style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:.7rem 1rem;">
                 </div>
-                <div class="mb-3"><input type="password" id="logPass"
-                        class="form-control bg-dark text-light border-secondary" placeholder="Password" required></div>
-                <div><button type="submit" class="btn btn-info w-100 fw-bold">Login</button></div>
-                <div class="text-center mt-3 small text-secondary">New here? <a href="#" id="showSignup"
-                        class="text-info text-decoration-none">Create account</a></div>
+                <div class="mb-3">
+                    <label class="form-label-custom">Password</label>
+                    <input type="password" id="logPass" class="form-control" placeholder="••••••••" required
+                        style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:.7rem 1rem;">
+                </div>
+                <button type="submit" class="btn btn-gradient w-100">Login to Dashboard</button>
+                <div class="text-center mt-3" style="font-size:.82rem;color:var(--text2);">
+                    New here? <a href="#" id="showSignup" style="color:var(--accent);text-decoration:none;font-weight:600;">Create account</a>
+                </div>
             </form>
 
+            <!-- Signup Form -->
             <form id="signupForm" class="hidden">
-                <div class="mb-2"><input type="text" id="regName"
-                        class="form-control bg-dark text-light border-secondary" placeholder="Full Name" required></div>
-                <div class="mb-2"><input type="email" id="regEmail"
-                        class="form-control bg-dark text-light border-secondary" placeholder="Email Address" required>
+                <div class="mb-1" style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.75rem;">Create Account 🚀</div>
+                <div class="mb-3">
+                    <label class="form-label-custom">Full Name</label>
+                    <input type="text" id="regName" class="form-control" placeholder="Your Name" required
+                        style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:.7rem 1rem;">
                 </div>
-                <div class="mb-3"><input type="password" id="regPass"
-                        class="form-control bg-dark text-light border-secondary" placeholder="Password" required></div>
-                <div><button type="submit" class="btn btn-success w-100 fw-bold">Sign Up</button></div>
-                <div class="text-center mt-3 small text-secondary">Already have an account? <a href="#" id="showLogin"
-                        class="text-info text-decoration-none">Login</a></div>
+                <div class="mb-3">
+                    <label class="form-label-custom">Email Address</label>
+                    <input type="email" id="regEmail" class="form-control" placeholder="you@email.com" required
+                        style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:.7rem 1rem;">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label-custom">Password</label>
+                    <input type="password" id="regPass" class="form-control" placeholder="Min 6 characters" required
+                        style="background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:.7rem 1rem;">
+                </div>
+                <button type="submit" class="btn btn-gradient-success w-100">Create My Account</button>
+                <div class="text-center mt-3" style="font-size:.82rem;color:var(--text2);">
+                    Already have an account? <a href="#" id="showLogin" style="color:var(--accent);text-decoration:none;font-weight:600;">Login</a>
+                </div>
             </form>
         </div>
     </div>
+</div>
 
-    <div class="page-wrapper hidden" id="dashboardSection">
-        <nav id="sidebar">
-            <div class="nav-brand">🛒 MUNNA TOOLS STORE</div>
-            <div class="nav-item active" onclick="showTab('store')" id="menu-store"><span>🤖</span> <span
-                    class="nav-label">MUNNA TOOLS STORE</span></div>
-            <div class="nav-item" onclick="showTab('licenses')" id="menu-licenses"><span>🔑</span> <span
-                    class="nav-label">My Licenses</span></div>
-        </nav>
+<!-- ===== DASHBOARD ===== -->
+<div class="page-wrapper" id="dashboardSection">
 
-        <div id="mainContent">
-            <div class="container-fluid p-0">
-                <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
-                    <div>
-                        <h4 class="mb-0 fw-bold text-info">Customer Dashboard</h4>
-                        <div class="small text-secondary mt-1">Logged in as: <span class="text-light fw-bold"
-                                id="userNameDisplay"></span></div>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-secondary me-2" id="darkModeToggle"
-                            title="Toggle Dark/Light Mode">☀️</button>
-                        <button class="btn btn-sm btn-danger px-3 fw-bold" onclick="logout()">Logout</button>
+    <!-- SIDEBAR -->
+    <nav id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">🛒</div>
+            <div class="brand-text">
+                MUNNA TOOLS
+                <small>Customer Portal</small>
+            </div>
+        </div>
+
+        <div class="nav-section-label">Main</div>
+        <div class="nav-item active" onclick="showTab('dashboard')" id="menu-dashboard">
+            <span class="nav-icon">📊</span><span>Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="showTab('store')" id="menu-store">
+            <span class="nav-icon">🤖</span><span>All Tools</span>
+        </div>
+
+        <div id="accountNavSection">
+            <div class="nav-section-label">Account</div>
+            <div class="nav-item" onclick="showTab('licenses')" id="menu-licenses">
+                <span class="nav-icon">🔑</span><span>My Licenses</span>
+            </div>
+            <div class="nav-item" onclick="showTab('orders')" id="menu-orders">
+                <span class="nav-icon">💳</span><span>Payment History</span>
+            </div>
+            <div class="nav-item" onclick="showTab('account')" id="menu-account">
+                <span class="nav-icon">👤</span><span>My Account</span>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div id="authSidebarInfo">
+                <div class="user-pill" onclick="showTab('account')">
+                    <div class="avatar" id="sidebarAvatar">M</div>
+                    <div class="uinfo">
+                        <div class="uname" id="sidebarName">Loading...</div>
+                        <div class="urole">Customer</div>
                     </div>
                 </div>
+                <button onclick="logout()" style="width:100%;margin-top:.65rem;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.25);color:var(--danger);border-radius:8px;padding:.45rem;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(255,77,109,0.2)'" onmouseout="this.style.background='rgba(255,77,109,0.1)'">
+                    🚪 Logout
+                </button>
+            </div>
+            <div id="unauthSidebarInfo" class="hidden" style="display:flex;flex-direction:column;gap:.5rem;">
+                <button onclick="showAuth('login')" class="btn-buy" style="padding:.5rem;font-size:.85rem;">Login</button>
+                <button onclick="showAuth('register')" class="btn" style="padding:.5rem;font-size:.85rem;background:rgba(0,198,255,0.1);color:var(--accent);border:1px solid rgba(0,198,255,0.2);">Create Account</button>
+            </div>
+        </div>
+    </nav>
 
-                <div id="storeTab">
-                    <h6 class="mb-3 text-secondary">Available Bots for Purchase</h6>
-                    <div class="row g-3" id="botsContainer"></div>
+    <!-- MAIN CONTENT -->
+    <div id="mainContent">
+        <div class="topbar">
+            <div>
+                <div class="page-title" id="pageTitle">Dashboard</div>
+                <div class="page-subtitle" id="pageSubtitle">Welcome back! Here's your overview.</div>
+            </div>
+            <div class="topbar-actions">
+                <div class="btn-icon" onclick="refreshCurrentTab()" title="Refresh">🔄</div>
+            </div>
+        </div>
+
+        <!-- ===== TAB: DASHBOARD ===== -->
+        <div id="dashboardTab">
+            <div class="stats-grid">
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg,#00c6ff,#0072ff);">
+                    <div class="stat-icon">🤖</div>
+                    <div class="stat-value" id="statAvailableTools">–</div>
+                    <div class="stat-label">Available Tools</div>
                 </div>
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg,#00e676,#00897b);">
+                    <div class="stat-icon">🔑</div>
+                    <div class="stat-value" id="statMyLicenses">–</div>
+                    <div class="stat-label">My Licenses</div>
+                </div>
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg,#ffd166,#f4a261);">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value" id="statActiveLicenses">–</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat-card" style="--stat-color: linear-gradient(90deg,#ff4d6d,#c9184a);">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-value" id="statExpiredLicenses">–</div>
+                    <div class="stat-label">Expired</div>
+                </div>
+            </div>
 
-                <div id="licensesTab" class="hidden">
-                    <h6 class="mb-3 text-secondary">Your Active Subscriptions</h6>
-                    <div class="table-responsive card p-2">
-                        <table class="table table-dark table-striped mb-0 text-center">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Bot ID / Username</th>
-                                    <th>Activation Key</th>
-                                    <th>Expiry Date</th>
-                                    <th>Machine ID</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="licensesTableBody"></tbody>
-                        </table>
+            <!-- Recent Subscriptions Preview -->
+            <div class="section-header">
+                <div class="section-title">🔑 Recent Subscriptions</div>
+                <span class="section-badge" id="subsBadge">Loading...</span>
+            </div>
+            <div class="table-card mb-4">
+                <table class="table table-dark table-hover mb-0" id="dashLicTable">
+                    <thead>
+                        <tr>
+                            <th>Tool Name</th>
+                            <th>Version</th>
+                            <th>Username</th>
+                            <th>Activation Key</th>
+                            <th>Expiry</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashLicBody"></tbody>
+                </table>
+            </div>
+
+            <!-- Available Tools Preview -->
+            <div class="section-header">
+                <div class="section-title">🤖 Available Tools</div>
+                <button onclick="showTab('store')" style="background:rgba(0,198,255,0.1);border:1px solid rgba(0,198,255,0.25);color:var(--accent);border-radius:8px;padding:.3rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;">View All →</button>
+            </div>
+            <div class="tools-grid" id="dashToolsGrid"></div>
+        </div>
+
+        <!-- ===== TAB: ALL TOOLS (STORE) ===== -->
+        <div id="storeTab" class="hidden">
+            <div class="section-header">
+                <div class="section-title">🤖 All Available Tools</div>
+                <span class="section-badge" id="toolsCountBadge">Loading...</span>
+            </div>
+            <div class="tools-grid" id="botsContainer"></div>
+        </div>
+
+        <!-- ===== TAB: MY LICENSES ===== -->
+        <div id="licensesTab" class="hidden">
+            <div class="section-header">
+                <div class="section-title">🔑 Your Active Subscriptions</div>
+                <span class="section-badge" id="licCountBadge">Loading...</span>
+            </div>
+            <div class="table-card">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tool Name</th>
+                            <th>Version</th>
+                            <th>Username / Bot ID</th>
+                            <th>Activation Key</th>
+                            <th>Expiry Date</th>
+                            <th>Machine ID</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="licensesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== TAB: MY ACCOUNT ===== -->
+        <div id="accountTab" class="hidden">
+            <div class="profile-header-card">
+                <div class="profile-avatar-lg" id="profileAvatarLg">M</div>
+                <div class="profile-info">
+                    <h5 id="profileFullName">Loading...</h5>
+                    <p id="profileEmail">Loading...</p>
+                    <span class="profile-member-badge">⭐ Member</span>
+                </div>
+            </div>
+
+            <div class="form-section-card">
+                <h6>✏️ Update Profile Information</h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Full Name</label>
+                        <input type="text" id="updateName" class="form-control-custom" placeholder="Your full name">
                     </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Email Address</label>
+                        <input type="email" id="updateEmail" class="form-control-custom" placeholder="Email address" disabled style="opacity:.5;cursor:not-allowed;">
+                    </div>
+                    <div class="col-12">
+                        <button onclick="updateProfile()" class="btn-buy" style="padding:.65rem 1.75rem;border-radius:10px;font-size:.875rem;">
+                            💾 Save Changes
+                        </button>
+                        <span id="profileMsg" style="margin-left:.75rem;font-size:.82rem;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-card">
+                <h6>🔒 Change Password</h6>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label-custom">Current Password</label>
+                        <input type="password" id="curPw" class="form-control-custom" placeholder="Current password">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label-custom">New Password</label>
+                        <input type="password" id="newPw" class="form-control-custom" placeholder="New password">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label-custom">Confirm Password</label>
+                        <input type="password" id="conPw" class="form-control-custom" placeholder="Confirm password">
+                    </div>
+                    <div class="col-12">
+                        <button onclick="changePassword()" class="btn-buy" style="background:linear-gradient(135deg,#7b61ff,#5b41cc);padding:.65rem 1.75rem;border-radius:10px;font-size:.875rem;box-shadow:0 4px 12px rgba(123,97,255,0.3);">
+                            🔑 Update Password
+                        </button>
+                        <span id="pwMsg" style="margin-left:.75rem;font-size:.82rem;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-card" style="border-color:rgba(255,77,109,0.2);">
+                <h6 style="color:var(--danger);">⚠️ Session</h6>
+                <p style="font-size:.83rem;color:var(--text2);margin-bottom:1rem;">Sign out from your account on this device.</p>
+                <button onclick="logout()" style="background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);color:var(--danger);border-radius:10px;padding:.65rem 1.5rem;font-size:.875rem;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(255,77,109,0.2)'" onmouseout="this.style.background='rgba(255,77,109,0.1)'">
+                    🚪 Sign Out
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== TAB: MY ORDERS ===== -->
+        <div id="ordersTab" class="hidden">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h4 style="font-weight:700;color:var(--text);margin:0;">Payment History</h4>
+                    <p style="color:var(--text2);font-size:.9rem;margin:0;">Your previous orders and their current status.</p>
+                </div>
+                <button class="btn btn-sm" style="background:rgba(0,198,255,0.1);color:var(--accent);border:1px solid rgba(0,198,255,0.2);" onclick="loadOrders()">
+                    🔄 Refresh
+                </button>
+            </div>
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Tool Name</th>
+                                <th>Plan (Months)</th>
+                                <th>Amount ($)</th>
+                                <th>Payment Method</th>
+                                <th>TrxID</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr><td colspan="8" class="text-center text-secondary py-4">Loading orders...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+
+    </div><!-- /mainContent -->
+</div><!-- /page-wrapper -->
+
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal-overlay hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(5px);z-index:9999;display:flex;align-items:center;justify-content:center;">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:15px;width:100%;max-width:400px;padding:1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+        <h5 style="color:var(--text);font-weight:bold;margin-bottom:1rem;">🛍️ Checkout</h5>
+        <div style="background:var(--bg3);border-radius:10px;padding:1rem;margin-bottom:1rem;font-size:.9rem;">
+            <div style="color:var(--text2);margin-bottom:.3rem;">Tool: <span id="checkoutToolName" style="color:var(--text);font-weight:bold;">-</span></div>
+            <div style="color:var(--text2);margin-bottom:.3rem;">Plan: <span id="checkoutPlan" style="color:var(--accent);font-weight:bold;">-</span></div>
+            <div style="color:var(--text2);">Total Amount: <span id="checkoutAmount" style="color:var(--success);font-weight:bold;font-size:1.1rem;">-</span></div>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label-custom">Payment Method</label>
+            <select id="checkoutMethod" class="form-control-custom" style="background:var(--bg);border:1px solid var(--border);color:var(--text);width:100%;border-radius:8px;padding:.6rem;">
+                <option value="bKash">bKash</option>
+                <option value="Nagad">Nagad</option>
+                <option value="Rocket">Rocket</option>
+                <option value="Binance">Binance</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="form-label-custom">Transaction ID (TrxID)</label>
+            <input type="text" id="checkoutTrx" class="form-control-custom" placeholder="e.g. 9F8A7B6C" style="background:var(--bg);border:1px solid var(--border);color:var(--text);width:100%;border-radius:8px;padding:.6rem;">
+            <div id="checkoutPaymentInstructions" style="font-size:.85rem;color:var(--accent);margin-top:.6rem;font-weight:600;white-space:pre-line;">Please transfer the exact amount and enter the TrxID here.</div>
+        </div>
+        
+        <div class="d-flex gap-2">
+            <button class="btn btn-secondary w-50" onclick="closeCheckoutModal()" style="border-radius:8px;padding:.6rem;">Cancel</button>
+            <button class="btn btn-buy w-50" id="checkoutConfirmBtn" onclick="submitCheckout()" style="border-radius:8px;padding:.6rem;background:linear-gradient(135deg,var(--accent),#00a8e8);">Submit Order</button>
+        </div>
     </div>
+</div>
 
-    <script>
-        // ==========================================
-        // TUMAR API URL EKHANE SET KORO
-        const BASE_URL = "https://munnabd26.online";
-        // ==========================================
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
 
-        const authSec = document.getElementById('authSection');
-        const dashSec = document.getElementById('dashboardSection');
-        const authAlert = document.getElementById('authAlert');
+<script>
+    // ==========================================
+    // API URL EKHANE SET KORO
+    // const BASE_URL = "https://munnabd26.online"; // Production
+    const BASE_URL = "http://127.0.0.1:5000"; // LOCAL TEST
+    // ==========================================
 
-        function showAlert(msg, type) {
-            authAlert.className = `alert alert-${type} small py-2`;
-            authAlert.textContent = msg;
-            authAlert.classList.remove('hidden');
+    let _allBots = []; // cache
+    let _myLicenses = [];
+
+    // ===== TOAST =====
+    function toast(msg, type = 'info') {
+        const icons = { ok: '✅', err: '❌', info: 'ℹ️' };
+        const el = document.createElement('div');
+        el.className = `toast-msg toast-${type}`;
+        el.innerHTML = `<span>${icons[type] || '•'}</span><span>${msg}</span>`;
+        document.getElementById('toastContainer').appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+    }
+
+    // ===== AUTH ALERT =====
+    function showAlert(msg, type) {
+        const el = document.getElementById('authAlert');
+        el.style.background = type === 'danger' ? 'rgba(255,77,109,0.12)' : 'rgba(0,230,118,0.12)';
+        el.style.border = `1px solid ${type === 'danger' ? 'rgba(255,77,109,0.3)' : 'rgba(0,230,118,0.3)'}`;
+        el.style.color = type === 'danger' ? '#ff4d6d' : '#00e676';
+        el.style.borderRadius = '10px';
+        el.style.padding = '.65rem 1rem';
+        el.textContent = msg;
+        el.classList.remove('hidden');
+    }
+
+    // ===== FORM SWITCH =====
+    document.getElementById('showSignup').onclick = (e) => {
+        e.preventDefault();
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('signupForm').classList.remove('hidden');
+        document.getElementById('authAlert').classList.add('hidden');
+    };
+    document.getElementById('showLogin').onclick = (e) => {
+        e.preventDefault();
+        document.getElementById('signupForm').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('authAlert').classList.add('hidden');
+    };
+
+    // ===== API =====
+    async function apiRequest(endpoint, method = 'GET', data = null) {
+        const token = localStorage.getItem('customerToken');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        const options = { method, headers };
+        if (data) options.body = JSON.stringify(data);
+        try {
+            const res = await fetch(`${BASE_URL}${endpoint}`, options);
+            return await res.json();
+        } catch (err) {
+            return { status: 'error', message: 'API Connection Failed! Backend offline.' };
         }
+    }
 
-        // Auth Form Toggle
-        document.getElementById('showSignup').onclick = (e) => { e.preventDefault(); document.getElementById('loginForm').classList.add('hidden'); document.getElementById('signupForm').classList.remove('hidden'); authAlert.classList.add('hidden'); };
-        document.getElementById('showLogin').onclick = (e) => { e.preventDefault(); document.getElementById('signupForm').classList.add('hidden'); document.getElementById('loginForm').classList.remove('hidden'); authAlert.classList.add('hidden'); };
-
-        // API Caller Setup
-        async function apiRequest(endpoint, method = 'GET', data = null) {
-            const token = localStorage.getItem('customerToken');
-            const headers = { 'Content-Type': 'application/json' };
-            if (token) headers['Authorization'] = `Bearer ${token}`;
-
-            const options = { method, headers };
-            if (data) options.body = JSON.stringify(data);
-
-            try {
-                const res = await fetch(`${BASE_URL}${endpoint}`, options);
-                return await res.json();
-            } catch (err) {
-                return { status: "error", message: "API Connection Failed! Backend is offline." };
-            }
+    // ===== LOGIN =====
+    document.getElementById('loginForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.textContent = 'Logging in...'; btn.disabled = true;
+        const res = await apiRequest('/api/customer/auth', 'POST', {
+            action: 'login',
+            email: document.getElementById('logEmail').value,
+            password: document.getElementById('logPass').value
+        });
+        btn.textContent = 'Login to Dashboard'; btn.disabled = false;
+        if (res.status === 'ok') {
+            localStorage.setItem('customerToken', res.token);
+            localStorage.setItem('customerName', res.user.name);
+            localStorage.setItem('customerEmail', res.user.email || document.getElementById('logEmail').value);
+            loadDashboard();
+        } else {
+            showAlert(res.message, 'danger');
         }
+    };
 
-        // Login logic
-        document.getElementById('loginForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.textContent = 'Logging in...'; btn.disabled = true;
-            const res = await apiRequest('/api/customer/auth', 'POST', { action: 'login', email: document.getElementById('logEmail').value, password: document.getElementById('logPass').value });
-            btn.textContent = 'Login'; btn.disabled = false;
+    // ===== SIGNUP =====
+    document.getElementById('signupForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.textContent = 'Creating...'; btn.disabled = true;
+        const res = await apiRequest('/api/customer/auth', 'POST', {
+            action: 'register',
+            name: document.getElementById('regName').value,
+            email: document.getElementById('regEmail').value,
+            password: document.getElementById('regPass').value
+        });
+        btn.textContent = 'Create My Account'; btn.disabled = false;
+        if (res.status === 'ok') {
+            showAlert(res.message, 'success');
+            document.getElementById('showLogin').click();
+        } else {
+            showAlert(res.message, 'danger');
+        }
+    };
 
-            if (res.status === 'ok') {
-                localStorage.setItem('customerToken', res.token);
-                localStorage.setItem('customerName', res.user.name);
-                loadDashboard();
-            } else {
-                showAlert(res.message, 'danger');
-            }
+    // ===== LOAD DASHBOARD =====
+    function loadDashboard() {
+        document.getElementById('authSection').classList.add('hidden');
+        document.getElementById('dashboardSection').classList.remove('hidden');
+        
+        const token = localStorage.getItem('customerToken');
+        if(token) {
+            document.getElementById('authSidebarInfo').classList.remove('hidden');
+            document.getElementById('unauthSidebarInfo').classList.add('hidden');
+            document.getElementById('accountNavSection').classList.remove('hidden');
+            
+            const name = localStorage.getItem('customerName') || '?';
+            const email = localStorage.getItem('customerEmail') || '';
+            document.getElementById('userNameDisplay') && (document.getElementById('userNameDisplay').textContent = name);
+            document.getElementById('sidebarName').textContent = name;
+            document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
+            document.getElementById('profileFullName').textContent = name;
+            document.getElementById('profileEmail').textContent = email;
+            document.getElementById('updateName').value = name;
+            document.getElementById('updateEmail').value = email;
+            document.getElementById('profileAvatarLg').textContent = name[0].toUpperCase();
+        } else {
+            document.getElementById('authSidebarInfo').classList.add('hidden');
+            document.getElementById('unauthSidebarInfo').classList.remove('hidden');
+            document.getElementById('accountNavSection').classList.add('hidden');
+        }
+        showTab('dashboard');
+    }
+    
+    function showAuth(type) {
+        document.getElementById('dashboardSection').classList.add('hidden');
+        document.getElementById('authSection').classList.remove('hidden');
+        if(type === 'login') {
+            document.getElementById('showLogin').click();
+        } else {
+            document.getElementById('showSignup').click();
+        }
+    }
+
+    // ===== TAB MANAGER =====
+    let _currentTab = 'dashboard';
+    const tabIds = ['dashboard', 'store', 'licenses', 'account', 'orders'];
+
+    function showTab(tab) {
+        const token = localStorage.getItem('customerToken');
+        if (!token && ['licenses', 'account', 'orders'].includes(tab)) {
+            showAuth('login');
+            return;
+        }
+        
+        _currentTab = tab;
+        tabIds.forEach(t => {
+            document.getElementById(t + 'Tab').classList.toggle('hidden', t !== tab);
+            const m = document.getElementById('menu-' + t);
+            if (m) m.classList.toggle('active', t === tab);
+        });
+        const titles = {
+            dashboard: ['Dashboard', 'Welcome back! Here\'s your overview.'],
+            store: ['All Tools', 'Browse and purchase bot licenses.'],
+            licenses: ['My Licenses', 'Your active subscriptions and activation keys.'],
+            account: ['My Account', 'Manage your profile and security settings.'],
+            orders: ['My Orders', 'Check your payment status and history.']
         };
+        document.getElementById('pageTitle').textContent = titles[tab][0];
+        document.getElementById('pageSubtitle').textContent = titles[tab][1];
 
-        // Signup logic
-        document.getElementById('signupForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.textContent = 'Creating...'; btn.disabled = true;
-            const res = await apiRequest('/api/customer/auth', 'POST', { action: 'register', name: document.getElementById('regName').value, email: document.getElementById('regEmail').value, password: document.getElementById('regPass').value });
-            btn.textContent = 'Sign Up'; btn.disabled = false;
+        if (tab === 'dashboard') loadDashboardData();
+        if (tab === 'store') loadStore();
+        if (tab === 'licenses') loadLicenses();
+        if (tab === 'account') loadAccountInfo();
+        if (tab === 'orders') loadOrders();
+    }
 
-            if (res.status === 'ok') {
-                showAlert(res.message, 'success');
-                document.getElementById('showLogin').click();
-            } else {
-                showAlert(res.message, 'danger');
-            }
-        };
+    function refreshCurrentTab() {
+        showTab(_currentTab);
+        toast('Refreshed!', 'info');
+    }
 
-        // Sidebar Tab Manager
-        function showTab(tab) {
-            document.getElementById('storeTab').classList.toggle('hidden', tab !== 'store');
-            document.getElementById('licensesTab').classList.toggle('hidden', tab !== 'licenses');
-            document.getElementById('menu-store').classList.toggle('active', tab === 'store');
-            document.getElementById('menu-licenses').classList.toggle('active', tab === 'licenses');
-            if (tab === 'store') loadStore();
-            if (tab === 'licenses') loadLicenses();
+    // ===== LOAD BOTS =====
+    async function fetchBots() {
+        if (_allBots.length) return _allBots;
+        const res = await apiRequest('/api/customer/bots');
+        if (res.status === 'error') { logout(); return []; }
+        _allBots = res.data || [];
+        return _allBots;
+    }
+
+    // ===== LOAD LICENSES =====
+    async function fetchLicenses() {
+        const res = await apiRequest('/api/customer/my_licenses');
+        _myLicenses = res.data || [];
+        return _myLicenses;
+    }
+
+    // ===== DASHBOARD DATA =====
+    async function loadDashboardData() {
+        const [bots, licenses] = await Promise.all([fetchBots(), fetchLicenses()]);
+
+        // Stats
+        const active = licenses.filter(l => l.status === 'ENABLED').length;
+        const expired = licenses.filter(l => l.status !== 'ENABLED').length;
+        document.getElementById('statAvailableTools').textContent = bots.length;
+        document.getElementById('statMyLicenses').textContent = licenses.length;
+        document.getElementById('statActiveLicenses').textContent = active;
+        document.getElementById('statExpiredLicenses').textContent = expired;
+
+        // Build bot version lookup map
+        const botMap = {};
+        bots.forEach(b => { botMap[b.app_name] = b.version; });
+
+        // Recent Subscriptions (dashboard)
+        const licBody = document.getElementById('dashLicBody');
+        document.getElementById('subsBadge').textContent = licenses.length + ' total';
+        if (!licenses.length) {
+            licBody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">🔑</div><h6>No subscriptions yet</h6><p>Purchase a tool to see your licenses here.</p></div></td></tr>`;
+        } else {
+            licBody.innerHTML = licenses.slice(0, 5).map(l => {
+                const today = new Date();
+                const exp = new Date(l.expiry);
+                const isExp = exp < today;
+                return `<tr>
+                    <td><span class="license-tool-badge">🤖 ${escH(l.bot_name)}</span></td>
+                    <td><span style="font-size:.75rem;color:var(--accent);background:rgba(0,198,255,0.08);border:1px solid rgba(0,198,255,0.2);padding:.15rem .5rem;border-radius:20px;font-weight:600;">v${escH(l.version)}</span></td>
+                    <td><span class="key-box" onclick="copyKey('${escH(l.username)}')" title="Click to copy ID">${escH(l.username)}</span></td>
+                    <td><span class="key-box" onclick="copyKey('${escH(l.key)}')" title="Click to copy Key">${escH(l.key)}</span></td>
+                    <td style="font-size:.82rem;color:var(--text2);">${escH(l.expiry || '-')}</td>
+                    <td>${l.status === 'ENABLED' && !isExp ? '<span class="badge-status-ok">ACTIVE</span>' : '<span class="badge-status-bad">EXPIRED</span>'}</td>
+                </tr>`;
+            }).join('');
         }
 
-        async function loadDashboard() {
-            authSec.classList.add('hidden');
-            dashSec.classList.remove('hidden');
-            document.getElementById('userNameDisplay').textContent = localStorage.getItem('customerName');
-            loadStore();
+        // Tools preview
+        const dashGrid = document.getElementById('dashToolsGrid');
+        if (!bots.length) {
+            dashGrid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">🤖</div><h6>No tools yet</h6><p>Admin hasn't added any bots.</p></div>`;
+        } else {
+            dashGrid.innerHTML = bots.slice(0, 3).map(b => buildToolCard(b)).join('');
         }
+        document.getElementById('toolsCountBadge') && (document.getElementById('toolsCountBadge').textContent = bots.length + ' tools');
+    }
 
-        // Load MUNNA TOOLS STORE Cards
-        async function loadStore() {
-            const res = await apiRequest('/api/customer/bots', 'GET');
-            if (res.status === 'error') return logout();
+    // ===== STORE =====
+    async function loadStore() {
+        const bots = await fetchBots();
+        const container = document.getElementById('botsContainer');
+        document.getElementById('toolsCountBadge').textContent = bots.length + ' tools';
+        if (!bots.length) {
+            container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">🤖</div><h6>No tools available</h6><p>Check back later!</p></div>`;
+            return;
+        }
+        container.innerHTML = bots.map(b => buildToolCard(b)).join('');
+    }
 
-            const container = document.getElementById('botsContainer');
-            container.innerHTML = res.data.map(b => `
-            <div class="col-md-6 col-lg-4">
-                <div class="card p-3 shadow-sm h-100" style="border-top: 3px solid #0dcaf0;">
-                    <h5 class="fw-bold mb-1">🤖 ${b.app_name}</h5>
-                    <div class="small text-secondary mb-3">Required Version: v${b.version}</div>
-                    
-                    <label class="small text-secondary mb-1">Select License Plan:</label>
-                    <select id="plan_${b.app_name.replace(/[^a-zA-Z0-9]/g, '')}" class="form-select form-select-sm bg-dark text-light border-secondary mb-3">
-                        <option value="1" data-price="${b.prices['1']}">1 Month (30 Days) - $${b.prices['1']}</option>
-                        <option value="2" data-price="${b.prices['2']}">2 Months (60 Days) - $${b.prices['2']}</option>
-                        <option value="3" data-price="${b.prices['3']}">3 Months (90 Days) - $${b.prices['3']}</option>
-                    </select>
-                    
-                    <button class="btn btn-success btn-sm w-100 mt-auto fw-bold" onclick="buyBot('${b.app_name}', '${b.app_name.replace(/[^a-zA-Z0-9]/g, '')}')">💸 Pay Now</button>
+    function buildToolCard(b) {
+        const sid = b.app_name.replace(/[^a-zA-Z0-9]/g, '');
+        return `
+        <div class="tool-card">
+            <div class="tool-header">
+                <div class="tool-icon">🤖</div>
+                <div style="flex:1;min-width:0;">
+                    <div class="tool-name">${escH(b.app_name)}</div>
+                    <div class="tool-version">📌 Version v${escH(b.version)}</div>
                 </div>
             </div>
-        `).join('');
+
+            <div style="font-size:.75rem;color:var(--text2);margin-bottom:.25rem;font-weight:600;">Select Plan:</div>
+            <div class="tool-prices" id="prices_${sid}">
+                <div class="price-pill selected" onclick="selectPlan('${sid}',1,${b.prices['1']})">
+                    <span class="plan-label">1 Month</span>
+                    <span class="plan-price">$${b.prices['1']}</span>
+                </div>
+                <div class="price-pill" onclick="selectPlan('${sid}',2,${b.prices['2']})">
+                    <span class="plan-label">2 Months</span>
+                    <span class="plan-price">$${b.prices['2']}</span>
+                </div>
+                <div class="price-pill" onclick="selectPlan('${sid}',3,${b.prices['3']})">
+                    <span class="plan-label">3 Months</span>
+                    <span class="plan-price">$${b.prices['3']}</span>
+                </div>
+            </div>
+            <input type="hidden" id="sel_${sid}" value="1">
+            <input type="hidden" id="selp_${sid}" value="${b.prices['1']}">
+
+            <button class="btn-buy" id="buybtn_${sid}" onclick="buyBot('${escH(b.app_name)}','${sid}')">
+                💸 Purchase Now
+            </button>
+        </div>`;
+    }
+
+    function selectPlan(sid, months, price) {
+        document.getElementById('sel_' + sid).value = months;
+        document.getElementById('selp_' + sid).value = price;
+        document.querySelectorAll(`#prices_${sid} .price-pill`).forEach((el, i) => {
+            el.classList.toggle('selected', i === months - 1);
+        });
+    }
+
+    // ===== CHECKOUT & BUY =====
+    let _checkoutData = null;
+    
+    async function buyBot(appName, sid) {
+        if (!localStorage.getItem('customerToken')) {
+            showAuth('login');
+            return;
         }
+        const plan = document.getElementById('sel_' + sid).value;
+        const price = document.getElementById('selp_' + sid).value;
+        
+        _checkoutData = { bot_name: appName, plan_months: parseInt(plan), price: price, sid: sid };
+        
+        document.getElementById('checkoutToolName').textContent = appName;
+        document.getElementById('checkoutPlan').textContent = plan + ' Month(s)';
+        document.getElementById('checkoutAmount').textContent = '$' + price;
+        document.getElementById('checkoutTrx').value = '';
+        
+        const sel = document.getElementById('checkoutMethod');
+        sel.innerHTML = '<option value="">Loading...</option>';
+        document.getElementById('checkoutModal').classList.remove('hidden');
+        
+        try {
+            const res = await fetch(BASE_URL + '/api/public/settings');
+            const data = await res.json();
+            if (data.status === 'ok') {
+                sel.innerHTML = data.payment_methods.map(m => `<option value="${escH(m)}">${escH(m)}</option>`).join('');
+                document.getElementById('checkoutPaymentInstructions').textContent = data.payment_instructions || 'Please transfer the exact amount and enter the TrxID here.';
+            } else sel.innerHTML = '<option value="">Error loading methods</option>';
+        } catch(e) { sel.innerHTML = '<option value="">Network error</option>'; }
+    }
+    
+    function closeCheckoutModal() {
+        document.getElementById('checkoutModal').classList.add('hidden');
+        _checkoutData = null;
+    }
+    
+    async function submitCheckout() {
+        if(!_checkoutData) return;
+        const method = document.getElementById('checkoutMethod').value;
+        const trx = document.getElementById('checkoutTrx').value.trim();
+        if(!trx) return alert("Transaction ID is required!");
+        
+        const btn = document.getElementById('checkoutConfirmBtn');
+        btn.textContent = '⏳ Submitting...'; btn.disabled = true;
+        
+        const payload = {
+            bot_name: _checkoutData.bot_name,
+            plan_months: _checkoutData.plan_months,
+            payment_method: method,
+            trx_id: trx
+        };
+        
+        const res = await apiRequest('/api/customer/checkout', 'POST', payload);
+        btn.textContent = 'Submit Order'; btn.disabled = false;
+        
+        if (res.status === 'ok') {
+            closeCheckoutModal();
+            toast(res.message, 'ok');
+            setTimeout(() => showTab('orders'), 600);
+        } else {
+            toast(res.message, 'err');
+        }
+    }
 
-        // Checkout & Auto Generation
-        async function buyBot(appName, selectId) {
-            const select = document.getElementById('plan_' + selectId);
-            const plan = select.value;
-            const price = select.options[select.selectedIndex].dataset.price;
-
-            if (!confirm(`Confirm your dummy payment of $${price} for ${appName} (${plan} Month)?`)) return;
-
-            const btn = document.activeElement;
-            const oldText = btn.textContent;
-            btn.textContent = 'Processing...'; btn.disabled = true;
-
-            const res = await apiRequest('/api/customer/checkout', 'POST', { bot_name: appName, plan_months: plan });
-
-            btn.textContent = oldText; btn.disabled = false;
-
-            if (res.status === 'ok') {
-                alert("✅ " + res.message);
-                showTab('licenses'); // Auto redirect to My Licenses Tab
-            } else {
-                alert("❌ " + res.message);
+    // ===== ORDERS =====
+    async function loadOrders() {
+        const tbody = document.getElementById('ordersTableBody');
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4">Loading orders...</td></tr>';
+        
+        const res = await apiRequest('/api/customer/orders');
+        if (res.status !== 'ok') {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4">${escH(res.message)}</td></tr>`;
+            return;
+        }
+        
+        const orders = res.data || [];
+        if (orders.length === 0) {
+            tbody.innerHTML = `<tr>
+                <td colspan="8" class="text-center py-5">
+                    <div style="font-size:3rem;margin-bottom:1rem;opacity:0.5;">🛒</div>
+                    <h5 style="color:var(--text);margin-bottom:.5rem;">No orders found</h5>
+                    <p style="color:var(--text2);font-size:.9rem;">You haven't made any purchases yet.</p>
+                    <button class="btn btn-buy mt-3" onclick="showTab('store')">Browse Tools</button>
+                </td>
+            </tr>`;
+            return;
+        }
+        
+        tbody.innerHTML = orders.map(o => {
+            let sBadge = `<span class="badge" style="background:rgba(255,193,7,0.1);color:#ffc107;border:1px solid rgba(255,193,7,0.2);">⏳ PENDING</span>`;
+            if (o.payment_status === 'APPROVED' || o.payment_status === 'SUCCESS') {
+                sBadge = `<span class="badge" style="background:rgba(0,255,136,0.1);color:var(--success);border:1px solid rgba(0,255,136,0.2);">✅ APPROVED</span>`;
+            } else if (o.payment_status === 'REJECTED') {
+                sBadge = `<span class="badge" style="background:rgba(255,77,109,0.1);color:var(--danger);border:1px solid rgba(255,77,109,0.2);">❌ REJECTED</span>`;
             }
+            
+            return `<tr>
+                <td style="color:var(--text2);">#${o.id}</td>
+                <td><span style="color:var(--text);font-weight:600;">${escH(o.bot_name)}</span></td>
+                <td>${o.plan_months} Month(s)</td>
+                <td style="color:var(--success);font-weight:bold;">$${o.amount}</td>
+                <td style="color:var(--accent);">${escH(o.payment_method || 'N/A')}</td>
+                <td style="font-family:monospace;color:var(--text2);">${escH(o.trx_id)}</td>
+                <td>${sBadge}</td>
+                <td style="font-size:.8rem;color:var(--text2);">${o.created_at.split('T')[0]}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    // ===== LICENSES =====
+    async function loadLicenses() {
+        const licenses = await fetchLicenses();
+        const tbody = document.getElementById('licensesTableBody');
+        document.getElementById('licCountBadge').textContent = licenses.length + ' subscriptions';
+
+        if (!licenses.length) {
+            tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🔑</div><h6>No subscriptions yet</h6><p>Go to <strong>All Tools</strong> to purchase your first bot license!</p></div></td></tr>`;
+            return;
         }
+        const today = new Date();
+        tbody.innerHTML = licenses.map((l, i) => {
+            const exp = new Date(l.expiry);
+            const isActive = l.status === 'ENABLED' && exp >= today;
+            return `<tr>
+                <td style="color:var(--text2);font-size:.8rem;">${i + 1}</td>
+                <td><span class="license-tool-badge">🤖 ${escH(l.bot_name)}</span></td>
+                <td><span style="font-size:.72rem;color:var(--accent);background:rgba(0,198,255,0.08);border:1px solid rgba(0,198,255,0.2);padding:.15rem .5rem;border-radius:20px;font-weight:600;">v${escH(l.version)}</span></td>
+                <td><span class="key-box" onclick="copyKey('${escH(l.username)}')" title="Click to copy ID">${escH(l.username)}</span></td>
+                <td><span class="key-box" onclick="copyKey('${escH(l.key)}')" title="Click to copy key">${escH(l.key)}</span></td>
+                <td style="font-size:.82rem;">${escH(l.expiry || '-')}</td>
+                <td style="font-size:.75rem;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;">${escH(l.machine_id && l.machine_id !== '-' ? l.machine_id.substring(0, 12) + '...' : '-')}</td>
+                <td>${isActive ? '<span class="badge-status-ok">ACTIVE</span>' : '<span class="badge-status-bad">EXPIRED</span>'}</td>
+                <td><button class="btn btn-sm" style="background:var(--accent);color:var(--bg);font-weight:bold;" onclick="showTab('tools')">Renew</button></td>
+            </tr>`;
+        }).join('');
+    }
 
-        // Load Purchased Licenses
-        async function loadLicenses() {
-            const res = await apiRequest('/api/customer/my_licenses', 'GET');
-            const tbody = document.getElementById('licensesTableBody');
-            if (res.data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-secondary py-4">You haven't purchased any bots yet.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = res.data.map(l => `
-            <tr>
-                <td class="fw-bold text-info">${l.username}</td>
-                <td><code class="text-warning fs-6 bg-dark px-2 py-1 rounded" style="border: 1px dashed #6c757d;">${l.key}</code></td>
-                <td>${l.expiry}</td>
-                <td class="small text-secondary">${l.machine_id}</td>
-                <td><span class="badge ${l.status === 'ENABLED' ? 'bg-success' : 'bg-danger'}">${l.status}</span></td>
-            </tr>
-        `).join('');
+    // Copy key to clipboard
+    function copyKey(key) {
+        navigator.clipboard.writeText(key).then(() => toast('Key copied!', 'ok')).catch(() => toast('Copy failed', 'err'));
+    }
+
+    // ===== ACCOUNT =====
+    function loadAccountInfo() {
+        const name = localStorage.getItem('customerName') || '';
+        const email = localStorage.getItem('customerEmail') || '';
+        document.getElementById('updateName').value = name;
+        document.getElementById('updateEmail').value = email;
+        document.getElementById('profileFullName').textContent = name;
+        document.getElementById('profileEmail').textContent = email;
+        document.getElementById('profileAvatarLg').textContent = name[0]?.toUpperCase() || '?';
+    }
+
+    async function updateProfile() {
+        const name = document.getElementById('updateName').value.trim();
+        const msg = document.getElementById('profileMsg');
+        if (!name) { msg.style.color = 'var(--danger)'; msg.textContent = 'Name cannot be empty.'; return; }
+        // Note: backend may not have a profile-update API yet; save locally for now
+        localStorage.setItem('customerName', name);
+        document.getElementById('sidebarName').textContent = name;
+        document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
+        document.getElementById('profileAvatarLg').textContent = name[0].toUpperCase();
+        document.getElementById('profileFullName').textContent = name;
+        msg.style.color = 'var(--success)';
+        msg.textContent = '✅ Profile updated!';
+        toast('Profile saved!', 'ok');
+        setTimeout(() => msg.textContent = '', 3000);
+    }
+
+    async function changePassword() {
+        const cur = document.getElementById('curPw').value;
+        const nw  = document.getElementById('newPw').value;
+        const cn  = document.getElementById('conPw').value;
+        const msg = document.getElementById('pwMsg');
+        if (!cur || !nw || !cn) { msg.style.color='var(--danger)'; msg.textContent='All fields required.'; return; }
+        if (nw !== cn) { msg.style.color='var(--danger)'; msg.textContent='Passwords do not match.'; return; }
+        if (nw.length < 6) { msg.style.color='var(--danger)'; msg.textContent='Min 6 characters required.'; return; }
+        const res = await apiRequest('/api/customer/change_password', 'POST', { current_password: cur, new_password: nw });
+        if (res.status === 'ok') {
+            msg.style.color = 'var(--success)'; msg.textContent = '✅ Password changed!';
+            document.getElementById('curPw').value = '';
+            document.getElementById('newPw').value = '';
+            document.getElementById('conPw').value = '';
+            toast('Password updated!', 'ok');
+        } else {
+            msg.style.color = 'var(--danger)'; msg.textContent = '❌ ' + (res.message || 'Failed');
         }
+        setTimeout(() => msg.textContent = '', 4000);
+    }
 
-        // Logout
-        function logout() {
-            localStorage.removeItem('customerToken');
-            localStorage.removeItem('customerName');
-            authSec.classList.remove('hidden');
-            dashSec.classList.add('hidden');
-        }
+    // ===== LOGOUT =====
+    function logout() {
+        localStorage.removeItem('customerToken');
+        localStorage.removeItem('customerName');
+        localStorage.removeItem('customerEmail');
+        _allBots = []; _myLicenses = [];
+        loadDashboard();
+        toast('Logged out successfully', 'ok');
+    }
 
-        // Dark/Light Mode Logic (Copied from Admin Panel)
-        (function () {
-            const saved = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : '');
-            const toggleEl = document.getElementById('darkModeToggle');
-            if (toggleEl) {
-                toggleEl.textContent = saved === 'light' ? '🌙' : '☀️';
-                toggleEl.addEventListener('click', () => {
-                    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-                    if (isLight) {
-                        document.documentElement.removeAttribute('data-theme');
-                        localStorage.setItem('theme', 'dark');
-                        toggleEl.textContent = '☀️';
-                    } else {
-                        document.documentElement.setAttribute('data-theme', 'light');
-                        localStorage.setItem('theme', 'light');
-                        toggleEl.textContent = '🌙';
-                    }
-                });
-            }
-        })();
+    // ===== HELPERS =====
+    function escH(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
-        // Auto Session Check
-        if (localStorage.getItem('customerToken')) loadDashboard();
-    </script>
+    // ===== AUTO SESSION =====
+    loadDashboard();
+</script>
 </body>
-
 </html>
